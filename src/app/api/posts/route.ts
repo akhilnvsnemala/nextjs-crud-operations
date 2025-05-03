@@ -2,6 +2,8 @@
 import { NextResponse } from 'next/server';
 import db from '../../../lib/db';
 import { title } from 'process';
+import type { ResultSetHeader } from 'mysql2';
+
 
 
 export async function GET() {
@@ -15,6 +17,6 @@ export async function POST(req: Request) {
   if (!content) return NextResponse.json({ error: 'No content' }, { status: 400 });
   if (!title_input) return NextResponse.json({ error: 'No title' }, { status: 400 });
 
-  const [result] = await db.query('INSERT INTO post (title, content) VALUES (?, ?)', [title_input, content]);
+  const [result] = await db.query<ResultSetHeader>('INSERT INTO post (title, content) VALUES (?, ?)', [title_input, content]);
   return NextResponse.json({ id: result.insertId, title_input, content });
 }
