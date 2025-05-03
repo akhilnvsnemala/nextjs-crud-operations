@@ -1,12 +1,17 @@
-// lib/db.ts i am drectly used the host details of mysql, try to use .env is the best practice of code maintance
+// lib/db.ts
 import mysql from 'mysql2/promise';
 
+import dotenv from 'dotenv';
+
+dotenv.config(); // Load .env
+
 const pool = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'nextjs_test',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_DATABASE_NAME,
 });
 
+console.log(pool,process.env.DB_HOST);
+
 export default pool;
- 
