@@ -1,15 +1,12 @@
 // app/api/posts/[id]/route.ts
 import { NextRequest, NextResponse } from 'next/server';
-// Change this import in app/api/posts/route.ts
 import db from '../../../../lib/db';
 
-export async function PUT(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
-  const id = params.id;
-  const body = await req.json();
+export async function PUT(req: NextRequest) {
+  const url = new URL(req.url);
+  const id = url.pathname.split('/').pop(); // Extract `id` from the URL
 
+  const body = await req.json();
   const { title_input, content } = body;
 
   try {
@@ -25,8 +22,15 @@ export async function PUT(
   }
 }
 
-export async function DELETE(_: Request, { params }: { params: { id: string } }) {
-  const id = parseInt(params.id);
-  await db.query('DELETE FROM post WHERE id = ?', [id]);
-  return NextResponse.json({ success: true });
+export async function DELETE(req: NextRequest) {
+  const url = new URL(req.url);
+  const id = parseInt(url.pathname.split('/').pop() || '0');
+
+  try {
+    await db.query('DELETE FROM post WHERE id = ?', [id]);
+    return NextResponse.json({ success: true });
+  } catch (error) {
+    console.error('Delete error:', error);
+    return NextResponse.json({ error: 'Database delete failed' }, { status: 500 });
+  }
 }
