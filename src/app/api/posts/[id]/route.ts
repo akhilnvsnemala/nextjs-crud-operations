@@ -1,5 +1,5 @@
 // app/api/posts/[id]/route.ts
-import { NextResponse } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 // Change this import in app/api/posts/route.ts
 import db from '../../../../lib/db';
 
