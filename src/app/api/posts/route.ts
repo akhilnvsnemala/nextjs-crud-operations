@@ -8,7 +8,11 @@ import type { ResultSetHeader } from 'mysql2';
 
 export async function GET() {
   const [rows] = await db.query('SELECT * FROM post ORDER BY id DESC');
-  return NextResponse.json(rows);
+  const mappedRows = (rows as any[]).map((row) => ({
+    ...row,
+    title_input: row.title,
+  }));
+  return NextResponse.json(mappedRows);
 }
 
 export async function POST(req: Request) {

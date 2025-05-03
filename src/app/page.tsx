@@ -57,7 +57,7 @@ export default function Home() {
 
   const handleEdit = (post: Post) => {
     setInput(post.content);
-    setTitleInput(post.title);
+    setTitleInput(post.title_input);
     setEditingId(post.id);
   };
 
@@ -100,7 +100,7 @@ export default function Home() {
             className="border p-3 rounded flex justify-between items-center"
           >
             <div>
-              <span className="block font-semibold me-2">{post.title}</span>
+              <span className="block font-semibold me-2">{post.title_input}</span>
               <span>{post.content}</span>
             </div>
             <div className="space-x-2">
