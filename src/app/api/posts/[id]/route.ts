@@ -2,15 +2,27 @@
 import { NextResponse } from 'next/server';
 // Change this import in app/api/posts/route.ts
 import db from '../../../../lib/db';
-import { title } from 'process';
 
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  const id = params.id;
+  const body = await req.json();
 
-export async function PUT(req: Request, { params }: { params: { id: string } }) {
-  const { title_input, content } = await req.json();
-  const id = parseInt(params.id);
+  const { title_input, content } = body;
 
-  await db.query('UPDATE post SET title =  ? , content = ? WHERE id = ?', [title_input, content, id]);
-  return NextResponse.json({ id, content });
+  try {
+    const [result] = await db.query(
+      'UPDATE post SET title = ?, content = ? WHERE id = ?',
+      [title_input, content, id]
+    );
+
+    return NextResponse.json({ success: true, result });
+  } catch (error) {
+    console.error('Update error:', error);
+    return NextResponse.json({ error: 'Database update failed' }, { status: 500 });
+  }
 }
 
 export async function DELETE(_: Request, { params }: { params: { id: string } }) {
